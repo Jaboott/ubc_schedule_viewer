@@ -38,10 +38,10 @@ function parseJson(coursesJson) {
             addCourseToList(course, term2Courses);
         }
     }
-    // console.log({
-    //     'term_1': term1Courses,
-    //     'term_2': term2Courses
-    // });
+    console.log({
+        'term_1': term1Courses,
+        'term_2': term2Courses
+    });
     return {
         'term_1': term1Courses,
         'term_2': term2Courses
