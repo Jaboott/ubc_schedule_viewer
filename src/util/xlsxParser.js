@@ -24,17 +24,28 @@ export function readFile(file) {
 /**
  * Parses the JSON representation of courses into list of course JSON organized by weekday
  * @param {object} coursesJson - The JSON representation of the xlsx file
- * @returns {object[]} - A list of JSON representation of courses organized by weekday
+ * @returns {object} - JSON representation of both term of school year
  */
 function parseJson(coursesJson) {
-    // Change it to term 1 and term 2 list
-    let courseList = initWeekList();
+    let term1Courses = initWeekList();
+    let term2Courses = initWeekList();
     for (const courseJson of coursesJson) {
         const course = parseCourse(courseJson);
-        addCourseToList(course, courseList);
+        // Seperate the list into two terms
+        if (course.term == 1) {
+            addCourseToList(course, term1Courses);
+        } else {
+            addCourseToList(course, term2Courses);
+        }
     }
-    console.log(courseList);
-    return courseList;
+    // console.log({
+    //     'term_1': term1Courses,
+    //     'term_2': term2Courses
+    // });
+    return {
+        'term_1': term1Courses,
+        'term_2': term2Courses
+    };
 }
 
 /**
