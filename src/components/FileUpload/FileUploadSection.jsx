@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import FileUploadButton from "./FileUploadButton";
 
-function CustomFileUpload({ onFileUpload }) {
+function FileUploadSection({ onFileUpload }) {
     const [error, setError] = useState(false);
 
     const handleDrop = (event) => {
@@ -39,4 +39,4 @@ function CustomFileUpload({ onFileUpload }) {
     );
 }
 
-export default CustomFileUpload;
+export default FileUploadSection;
