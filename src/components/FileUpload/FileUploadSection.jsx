@@ -1,17 +1,15 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import FileUploadButton from "./FileUploadButton";
 
-function CustomFileUpload() {
+function CustomFileUpload({ onFileUpload }) {
     const [error, setError] = useState(false);
-    const [file, setFile] = useState();
 
     const handleDrop = (event) => {
         event.preventDefault();
         const drop_file = event.dataTransfer.files[0];
 
         if (drop_file.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-            setFile(drop_file);
-            console.log(drop_file.name);
+            onFileUpload(drop_file);
         } else {
             setError(true);
 
@@ -19,7 +17,7 @@ function CustomFileUpload() {
                 setError(false);
             }, 3000);
         }
-    }
+    };
 
     const handleDragOver = (event) => {
         event.preventDefault();
@@ -32,11 +30,11 @@ function CustomFileUpload() {
             </span>
             <span className={`text-sm text-center ${error ? "text-[#f06161]" : "text-[#83828B]"}`}>
                 {error ?
-                    'Application only support .xlsx file type.' :
+                    'Application only support .xlsx file.' :
                     'Click Choose File button to get started or drag and drop files to upload.'
                 }
             </span>
-            <FileUploadButton></FileUploadButton>
+            <FileUploadButton onFileUpload={onFileUpload}></FileUploadButton>
         </div>
     );
 }
