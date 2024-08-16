@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import './App.css';
-import FileUpload from './components/FileUpload'
+import ControlBar from './components/FileUploadScreen'
 
 function App() {
 
   return (
     <div className="App">
-      <FileUpload></FileUpload>
+      <ControlBar></ControlBar>
     </div>
   );
 }
