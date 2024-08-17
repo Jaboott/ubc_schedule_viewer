@@ -29,9 +29,9 @@ function FileUploadSection({ onFileUpload }) {
                 {error ? 'Wrong file type!' : 'Upload your file'}
             </span>
             <span className={`text-sm text-center ${error ? "text-[#f06161]" : "text-[#83828B]"}`}>
-                {error ?
-                    'Application only support .xlsx file.' :
-                    'Click Choose File button to get started or drag and drop files to upload.'
+                {error
+                    ? 'Application only support .xlsx file.'
+                    : 'Click Choose File button to get started or drag and drop files to upload.'
                 }
             </span>
             <FileUploadButton onFileUpload={onFileUpload}></FileUploadButton>

@@ -2,23 +2,28 @@ import * as XLSX from 'xlsx';
 
 /**
  * Read the xlsx file 
- * @param {File} file -  The xlsx file the user inputed through form
- * @returns - Todo
+ * @param {File} file - The xlsx file the user inputed through form
+ * @returns {object} - JSON representation of both term of school year
  */
 export function readFile(file) {
-    const fileReader = new FileReader();
-    
-    fileReader.onload = (event) => {
-        const arrayBuffer = event.target.result;
-        
-        const workbook = XLSX.read(arrayBuffer);
-        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        // Skip the first 3 line
-        const coursesJson = XLSX.utils.sheet_to_json(worksheet, {header: 1, range: 3});
-        parseJson(coursesJson);
-    };
+    return new Promise((resolve, reject) => {
+        const fileReader = new FileReader();
 
-    fileReader.readAsArrayBuffer(file);
+        fileReader.onload = (event) => {
+            const arrayBuffer = event.target.result;
+            const workbook = XLSX.read(arrayBuffer);
+            const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+            // Skip the first 3 line
+            const coursesJson = XLSX.utils.sheet_to_json(worksheet, { header: 1, range: 3 });
+            resolve(parseJson(coursesJson));
+        };
+
+        fileReader.onerror = function(event) {
+            reject(event.target.error);
+        }
+
+        fileReader.readAsArrayBuffer(file);
+    });
 }
 
 /**
@@ -38,10 +43,7 @@ function parseJson(coursesJson) {
             addCourseToList(course, term2Courses);
         }
     }
-    console.log({
-        'term_1': term1Courses,
-        'term_2': term2Courses
-    });
+
     return {
         'term_1': term1Courses,
         'term_2': term2Courses
@@ -75,7 +77,7 @@ function addCourseToList(course, courseList) {
  */
 function parseCourse(courseJson) {
     return {
-        'term': Number(courseJson[0].charAt(courseJson[0].indexOf('Term')+5)),
+        'term': Number(courseJson[0].charAt(courseJson[0].indexOf('Term') + 5)),
         'course': getCourseInfo(courseJson[4].split('-')),
         'meeting_patterns': getMeetingPatterns(courseJson[7].split(' | '))
     };
@@ -118,7 +120,7 @@ function convertTime(timeData) {
         hours = 0;
     }
 
-    const decimalHours = hours + minutes/60;
+    const decimalHours = hours + minutes / 60;
 
     return decimalHours;
 }
@@ -143,7 +145,7 @@ function getCourseInfo(courseInfo) {
 /**
  * Initialize a list containing 5 lists representing each weekday
  * @returns {object[]} - A list representing 5 days of the week 
- */ 
+ */
 function initWeekList() {
     let weekList = [];
     for (let i = 0; i < 5; i++) {
@@ -151,3 +153,5 @@ function initWeekList() {
     }
     return weekList;
 }
+
+export default readFile;
