@@ -8,12 +8,11 @@ function CourseList({ courses }) {
         <div className="mx-3 pb-2 flex flex-col">
             <h1 className="py-2 font-semibold text-lg">Courses</h1>
             <div>
-                {/* {courses.map((course, index) => (
+                {courses.map((course, index) => (
                     <div key={index}>
                         <Course course={course} />
                     </div>
-                ))} */}
-                <Course></Course>
+                ))}
             </div>
         </div>
     );
