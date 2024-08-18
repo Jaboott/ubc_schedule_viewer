@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import Calendar from './Calendar';
 import LeftBar from './LeftBar';
+import { ConvertToCalendar } from '../../util/xlsxParser';
 
 function SchedulePage({ schedule }) {
 
@@ -13,13 +14,12 @@ function SchedulePage({ schedule }) {
     // Return null if no schedule is given yet
     if (!schedule) {
         return null; 
-    }
-
-    console.log(schedule[term]);
-
+    } 
+    
     return (
         <div className="flex">
             <LeftBar schedule={schedule[term]} onTermChange={handleTermChange}></LeftBar>
+            <hr className="border-l-2 h-screen w-px border-[#282a30]"></hr>
             <Calendar></Calendar>
         </div>
     );

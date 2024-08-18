@@ -8,7 +8,7 @@ import * as XLSX from 'xlsx';
 export function readFile(file) {
     return new Promise((resolve, reject) => {
         const fileReader = new FileReader();
-
+        
         fileReader.onload = (event) => {
             const arrayBuffer = event.target.result;
             const workbook = XLSX.read(arrayBuffer);
@@ -18,7 +18,7 @@ export function readFile(file) {
             resolve(parseJson(coursesJson));
         };
 
-        fileReader.onerror = function(event) {
+        fileReader.onerror = function (event) {
             reject(event.target.error);
         }
 
@@ -32,15 +32,16 @@ export function readFile(file) {
  * @returns {object} - JSON representation of both term of school year
  */
 function parseJson(coursesJson) {
-    let term1Courses = initWeekList();
-    let term2Courses = initWeekList();
+    let term1Courses = [];
+    let term2Courses = [];
+    
     for (const courseJson of coursesJson) {
         const course = parseCourse(courseJson);
         // Seperate the list into two terms
         if (course.term == 1) {
-            addCourseToList(course, term1Courses);
+            term1Courses.push(course);
         } else {
-            addCourseToList(course, term2Courses);
+            term2Courses.push(course);
         }
     }
 
@@ -51,11 +52,12 @@ function parseJson(coursesJson) {
 }
 
 /**
- * Add a JSON course to the specified week day
- * @param {object} course 
- * @param {object[]} courseList 
+ * Convert the courses to a weekday format
+ * @param {object} term1Courses - The JSON of term 1 courses
+ * @param {object} term2Courses - The JSON of term 2 courses
+ * @param {object} courseList - The JSON of both term courses organized by weekday
  */
-function addCourseToList(course, courseList) {
+export function ConvertToCalendar(term1Courses, term2Courses) {
     // Used to convert string representation of date to index
     const dayToIndex = {
         "Mon": 0,
@@ -65,9 +67,25 @@ function addCourseToList(course, courseList) {
         "Fri": 4
     };
 
-    for (const day of course['meeting_patterns'].course_day) {
-        courseList[dayToIndex[day]].push(course);
+    // Add courses to its matching weekdays
+    const addCourse = (courses, courseList) => {
+        for (const course of courses) {
+            for (const day of course['meeting_patterns'].course_day) {
+                courseList[dayToIndex[day]].push(course);
+            }
+        }
     }
+
+    let term1CourseList = initWeekList();
+    let term2CourseList = initWeekList();
+
+    addCourse(term1Courses, term1CourseList);
+    addCourse(term2Courses, term2CourseList);
+
+    return {
+        'term_1': term1CourseList,
+        'term_2': term2CourseList
+    };
 }
 
 /**
@@ -79,7 +97,29 @@ function parseCourse(courseJson) {
     return {
         'term': Number(courseJson[0].charAt(courseJson[0].indexOf('Term') + 5)),
         'course': getCourseInfo(courseJson[4].split('-')),
-        'meeting_patterns': getMeetingPatterns(courseJson[7].split(' | '))
+        'meeting_patterns': getMeetingPatterns(courseJson[7].split(' | ')),
+        'additional': getAdditional(courseJson)
+    };
+}
+
+/**
+ * Retrieve the prof of a course and the instructional format
+ * @param {object} courseJson - The JSON containing the course information
+ * @returns {object} - A JSON representing prof and instructional format
+ */
+function getAdditional(courseJson) {
+    let prof = courseJson[9];
+    
+    // When prof is not set
+    if (!prof) {
+        prof = "Prof TBD";
+    }
+
+    const instructionalFormat = courseJson[5];
+
+    return {
+        'prof': prof,
+        'instructional_format': instructionalFormat
     };
 }
 
@@ -90,12 +130,20 @@ function parseCourse(courseJson) {
  */
 function getMeetingPatterns(meetingPattern) {
     const courseDay = meetingPattern[1].split(' ');
+    let courseLocation = meetingPattern[3];
+
+    // When location of course is not set
+    if (!courseLocation) {
+        courseLocation = "Location TBD";
+    }
+
     let [start_time, end_time] = meetingPattern[2].split(' - ');
 
     return {
         'start_time': convertTime(start_time),
         'end_time': convertTime(end_time),
-        'course_day': courseDay
+        'course_day': courseDay,
+        'course_location': courseLocation
     };
 }
 
