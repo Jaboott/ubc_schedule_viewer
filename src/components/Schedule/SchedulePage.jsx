@@ -1,7 +1,6 @@
 import { useCallback, useState } from 'react';
 import Calendar from './Calendar';
 import LeftBar from './LeftBar';
-import { ConvertToCalendar } from '../../util/xlsxParser';
 
 function SchedulePage({ schedule }) {
 
