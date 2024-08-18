@@ -1,7 +1,8 @@
 function Course({ course }) {
 
     return (
-        <div className={`flex flex-col bg-[${course.color}] mb-4 pl-2 py-1 rounded-md place-content-center hover:scale-[1.01] ease-in-out duration-100`}>
+        <div className="flex flex-col mb-4 pl-2 py-1 rounded-md place-content-center hover:scale-[1.01] ease-in-out duration-100"
+            style={{ backgroundColor: course.color }}>
             <h1 className="text-black">
                 {course ? course.course_code : "Place Holder"}
             </h1>
