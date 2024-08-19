@@ -17,13 +17,15 @@ function CourseList({ courses }) {
                     'course_code': courseCode,
                     'course_title': course["course"].course_title,
                     'color': colors[unique],
-                    'Lecture': null,
-                    'Discussion': null,
-                    'Laboratory': null
+                    'course_detail': {
+                        'Lecture': null,
+                        'Discussion': null,
+                        'Laboratory': null
+                    }
                 });
                 unique++;
             }
-            map.get(courseCode)[course["additional"].instructional_format] = course
+            map.get(courseCode)["course_detail"][course["additional"].instructional_format] = course
         }
         return Array.from(map.values());
     }
