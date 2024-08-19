@@ -137,6 +137,11 @@ function getMeetingPatterns(meetingPattern) {
         courseLocation = "Location TBD";
     }
 
+    // Sometimes meeting pattern is displayed twice due to break
+    if (courseLocation.includes("\n\n")) {
+        courseLocation = courseLocation.split("\n\n")[0];
+    }
+
     let [start_time, end_time] = meetingPattern[2].split(' - ');
 
     return {
