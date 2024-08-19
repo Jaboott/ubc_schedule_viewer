@@ -41,7 +41,7 @@ function Course({ course }) {
             </div>
             <div
                 ref={contentRef}
-                className="duration-300 ease-in-out"
+                className="overflow-hidden duration-300 ease-in-out"
                 style={{ maxHeight: "0px" }}
             >
                 <CourseDetail course={course.course_detail} />
