@@ -27,6 +27,7 @@ function Course({ course }) {
 
     return (
         <div className="flex flex-col mb-4 rounded-md hover:scale-[1.01]" style={{ backgroundColor: course.color }}>
+            {/* General Course Information */}
             <div className="flex justify-between px-3 py-1 hover:cursor-pointer"
                 onClick={handleClick}>
                 <div className="flex flex-col place-content-center">
@@ -39,6 +40,7 @@ function Course({ course }) {
                 </div>
                 <i className={`mr-3 place-content-center ${expand ? "rotate-[-90deg]" : "rotate-0"} ease-in-out duration-100`}><FiChevronLeft className="text-[#696b6f] text-xl" /></i>
             </div>
+            {/* Course Details */}
             <div
                 ref={contentRef}
                 className="overflow-hidden duration-300 ease-in-out"

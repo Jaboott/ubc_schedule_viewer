@@ -8,7 +8,7 @@ function CourseDetail({ course }) {
         let hours = Math.floor(time);
         let minutes = Math.round((time - hours) * 60);
         const modifier = (hours >= 12) && (hours != 24) ? 'PM' : 'AM';
-        
+
         if (hours > 12) {
             hours = hours - 12;
         } else if (hours == 0 || hours == 24) {
@@ -19,7 +19,8 @@ function CourseDetail({ course }) {
 
         return `${hours}:${minutes} ${modifier}`;
     }
-    
+
+    // Component of the course details
     const CourseSection = ({ title, courseDetail }) => {
         return (
             <div className="flex flex-col mb-4">

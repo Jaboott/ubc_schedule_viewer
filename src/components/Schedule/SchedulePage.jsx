@@ -8,20 +8,16 @@ function SchedulePage({ schedule }) {
 
     const handleTermChange = useCallback((term) => {
         setTerm(term);
-    });
+    }, [term]);
 
-    // Return null if no schedule is given yet
-    if (!schedule) {
-        return null; 
-    } 
-    
-    return (
+    return (<> {schedule &&
         <div className="flex">
             <LeftBar schedule={schedule[term]} onTermChange={handleTermChange}></LeftBar>
             <hr className="border-l-2 h-screen w-px border-[#282a30]"></hr>
             <Calendar></Calendar>
         </div>
-    );
+    }
+    </>);
 }
 
 export default SchedulePage;
