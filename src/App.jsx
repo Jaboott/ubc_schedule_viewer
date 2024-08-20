@@ -18,7 +18,7 @@ function App() {
 
   return (
     <div className="App">
-      {(file)
+      {file
         ? <SchedulePage schedule={file}></SchedulePage>
         : <FileUploadSection onFileUpload={handleFileUpload}></FileUploadSection>
       }

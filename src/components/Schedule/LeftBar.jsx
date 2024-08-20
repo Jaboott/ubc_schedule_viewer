@@ -8,7 +8,7 @@ function LeftBar({ schedule, onTermChange }) {
     }
 
     return (
-        <div className="flex flex-col w-96 bg-[#191a21] rounded-lg">
+        <div className="flex flex-col bg-[#191a21] rounded-lg lg:w-96">
             <div className="flex flex-col mx-4">
                 <TermSelector onTermChange={onTermChange}></TermSelector>
                 <hr className="border-[#363943]"></hr>

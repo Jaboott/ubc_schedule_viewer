@@ -11,9 +11,9 @@ function SchedulePage({ schedule }) {
     }, [term]);
 
     return (<> {schedule &&
-        <div className="flex">
+        <div className="flex flex-col lg:flex-row">
             <LeftBar schedule={schedule[term]} onTermChange={handleTermChange}></LeftBar>
-            <hr className="border-l-2 h-screen w-px border-[#282a30]"></hr>
+            <hr className="border-b border-[#282a30] lg:w-px lg:h-screen lg:border-l-2"></hr>
             <Calendar></Calendar>
         </div>
     }
