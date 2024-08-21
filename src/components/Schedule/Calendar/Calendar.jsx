@@ -1,9 +1,19 @@
 import { convertToDecimalTime } from "../../../util/utils";
 import CalendarCourse from "./CalendarCourse";
+import { useState, useCallback } from "react";
 
 function Calendar({ schedule }) {
     const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
     const timeSlots = Array.from({ length: 15 }, (v, i) => i + 8);
+    const [hoveredTag, setHoveredTag] = useState(null);
+
+    const handleMouseEnter = useCallback((tag) => {
+        setHoveredTag(tag);
+    }, []);
+
+    const handleMouseLeave = useCallback(() => {
+        setHoveredTag(null);
+    }, []);
 
     return (
         <div className="grid grid-cols-[80px_repeat(5,_1fr)] mr-14 ml-7">
@@ -11,8 +21,7 @@ function Calendar({ schedule }) {
             {daysOfWeek.map((day, index) => (
                 <div
                     key={day}
-                    className={`h-16 flex pt-4 justify-center border-[#24252e] ${index == 0 ? 'col-start-2' : ''}`}
-                >
+                    className={`h-16 flex pt-4 justify-center border-[#24252e] ${index == 0 ? 'col-start-2' : ''}`}>
                     <h1 className="text-xl font-thin text-white">{day}</h1>
                 </div>
             ))}
@@ -32,10 +41,13 @@ function Calendar({ schedule }) {
                     {timeSlots.map((time) => (
                         <div key={time} className="h-14 border-t-2 border-[#24252e] relative">
                             {(schedule[index] || []).map((course, idx) => (
-                                <div key={idx}>
-                                    <CalendarCourse course={course} time={time}></CalendarCourse>
+                                <div
+                                    key={idx}
+                                    onMouseEnter={() => handleMouseEnter(course["course"].course_code)}
+                                    onMouseLeave={handleMouseLeave}
+                                >
+                                    <CalendarCourse course={course} time={time} isHover={hoveredTag == course["course"].course_code}></CalendarCourse>
                                 </div>
-
                             ))}
                         </div>
                     ))}

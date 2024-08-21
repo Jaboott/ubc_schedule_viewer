@@ -1,4 +1,4 @@
-function CalendarCourse({ course, time }) {
+function CalendarCourse({ course, time, isHover }) {
     const startTime = course["meeting_patterns"].start_time;
     const endTime = course["meeting_patterns"].end_time;
     const isLecture = course["additional"].instructional_format == "Lecture";
@@ -20,13 +20,14 @@ function CalendarCourse({ course, time }) {
         startTime - 0.5 == time
     ) && (
             <div
-                className="absolute ml-px rounded-md z-10 w-[98%]"
+                className={`absolute ml-px rounded-md z-10 w-[98%] ${isHover ? "scale-110 z-20" : "null"} ease-in-out duration-300`}
                 style={{
                     marginTop: 56 * (startTime - Math.floor(startTime)),
                     height: 56 * (endTime - startTime) - 6,
-                    background: isLecture ? course.color : `repeating-linear-gradient(45deg, ${adjustColor(course.color, -73)}, ${adjustColor(course.color, -73)} 3px, ${adjustColor(course.color, -80)} 3px, ${adjustColor(course.color, -80)} 6px)`,
+                    background: isLecture ? course.color : `repeating-linear-gradient(-45deg, ${adjustColor(course.color, -75)}, ${adjustColor(course.color, -75)} 3px, ${adjustColor(course.color, -80)} 3px, ${adjustColor(course.color, -80)} 6px)`,
                     border: isLecture ? null : `2px dashed ${course.color}`
-                }}>
+                }}
+            >
                 <div className="flex flex-col pl-1 lg:pl-3"
                     style={{
                         color: isLecture ? course.color : "white",

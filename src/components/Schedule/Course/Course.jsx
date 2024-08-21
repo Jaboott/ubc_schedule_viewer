@@ -26,7 +26,7 @@ function Course({ course }) {
     }, [expand]);
 
     return (
-        <div className="flex flex-col mb-4 rounded-md hover:scale-[1.01]" style={{ backgroundColor: course.color }}>
+        <div className="flex flex-col mb-4 rounded-md hover:scale-[1.05] ease-in-out duration-300" style={{ backgroundColor: course.color }}>
             {/* General Course Information */}
             <div className="flex justify-between px-3 py-1 hover:cursor-pointer"
                 onClick={handleClick}>
