@@ -1,6 +1,6 @@
 
 // Convert decimal time to 12 hr
-export function convertToDecimalTime(time) {
+export function convertDecimalTime(time) {
     let hours = Math.floor(time);
     let minutes = Math.round((time - hours) * 60);
     const modifier = (hours >= 12) && (hours != 24) ? 'PM' : 'AM';

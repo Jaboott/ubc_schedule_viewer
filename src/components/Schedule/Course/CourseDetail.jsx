@@ -1,6 +1,6 @@
 import { IoPersonOutline, IoLocationOutline } from "react-icons/io5";
 import { IoMdTime } from "react-icons/io";
-import { convertToDecimalTime } from "../../../util/utils";
+import { convertDecimalTime } from "../../../util/utils";
 
 function CourseDetail({ course }) {
     // Component of the course details
@@ -23,8 +23,8 @@ function CourseDetail({ course }) {
                 <div className="flex items-center">
                     <IoMdTime />
                     <h1 className="text-xs pl-1">{
-                        convertToDecimalTime(courseDetail.meeting_patterns.start_time) + " - " +
-                        convertToDecimalTime(courseDetail.meeting_patterns.end_time)
+                        convertDecimalTime(courseDetail.meeting_patterns.start_time) + " - " +
+                        convertDecimalTime(courseDetail.meeting_patterns.end_time)
                     }</h1>
                 </div>
                 {/* Professor */}

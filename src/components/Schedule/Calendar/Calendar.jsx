@@ -1,19 +1,11 @@
-import { convertToDecimalTime } from "../../../util/utils";
+import { convertDecimalTime } from "../../../util/utils";
 import CalendarCourse from "./CalendarCourse";
-import { useState, useCallback } from "react";
+import { useHover } from "../HoverContext";
 
 function Calendar({ schedule }) {
     const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
     const timeSlots = Array.from({ length: 15 }, (v, i) => i + 8);
-    const [hoveredTag, setHoveredTag] = useState(null);
-
-    const handleMouseEnter = useCallback((tag) => {
-        setHoveredTag(tag);
-    }, []);
-
-    const handleMouseLeave = useCallback(() => {
-        setHoveredTag(null);
-    }, []);
+    const { handleMouseEnter, handleMouseLeave, hoveredTag } = useHover();
 
     return (
         <div className="grid grid-cols-[80px_repeat(5,_1fr)] mr-14 ml-7">
@@ -30,7 +22,7 @@ function Calendar({ schedule }) {
             <div className="col-start-1 row-start-2">
                 {timeSlots.map((time) => (
                     <div key={time} className="h-14 flex items-center justify-end mr-4 text-white">
-                        <h1 className="mt-[-56px] text-sm font-medium text-[#70707e]">{convertToDecimalTime(time).replace(":00", "")}</h1>
+                        <h1 className="mt-[-56px] text-sm font-medium text-[#70707e]">{convertDecimalTime(time).replace(":00", "")}</h1>
                     </div>
                 ))}
             </div>

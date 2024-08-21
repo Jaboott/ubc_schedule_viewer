@@ -13,7 +13,7 @@ function CalendarSection({ schedule }) {
     return (
         <div className="flex grow flex-col">
             <h1 className="text-4xl font-medium my-5 pl-7">{monthNames[month.getMonth()]}</h1>
-            <Calendar schedule={schedule}></Calendar>
+            <Calendar schedule={schedule} />
         </div>
     );
 }

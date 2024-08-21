@@ -1,11 +1,12 @@
 import { FiChevronLeft } from "react-icons/fi";
 import { useState, useEffect, useRef } from 'react';
 import CourseDetail from "./CourseDetail";
+import { useHover } from "../HoverContext";
 
 function Course({ course }) {
-
     const [expand, setExpand] = useState(false);
     const contentRef = useRef(null);
+    const { handleMouseEnter, handleMouseLeave, hoveredTag } = useHover();
 
     const handleClick = () => {
         setExpand(!expand);
@@ -26,7 +27,13 @@ function Course({ course }) {
     }, [expand]);
 
     return (
-        <div className="flex flex-col mb-4 rounded-md hover:scale-[1.05] ease-in-out duration-300" style={{ backgroundColor: course.color }}>
+        <div
+            className={`flex flex-col mb-4 rounded-md ${hoveredTag == course.course_code ? "scale-[1.05] z-20" : "null"} ease-in-out duration-300`}
+            style={{ backgroundColor: course.color }}
+            onMouseEnter={() => handleMouseEnter(course.course_code)}
+            onMouseLeave={handleMouseLeave}
+        >
+            
             {/* General Course Information */}
             <div className="flex justify-between px-3 py-1 hover:cursor-pointer"
                 onClick={handleClick}>
@@ -40,6 +47,7 @@ function Course({ course }) {
                 </div>
                 <i className={`mr-3 place-content-center ${expand ? "rotate-[-90deg]" : "rotate-0"} ease-in-out duration-100`}><FiChevronLeft className="text-[#696b6f] text-xl" /></i>
             </div>
+
             {/* Course Details */}
             <div
                 ref={contentRef}

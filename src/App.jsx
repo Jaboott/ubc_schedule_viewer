@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import FileUploadSection from './components/FileUpload/FileUploadPage';
 import SchedulePage from './components/Schedule/SchedulePage';
 import readFile from './util/xlsxParser';
+import { HoverProvider } from './components/Schedule/HoverContext.jsx';
 
 function App() {
 
@@ -18,8 +19,10 @@ function App() {
   return (
     <div className="App">
       {file
-        ? <SchedulePage schedule={file}></SchedulePage>
-        : <FileUploadSection onFileUpload={handleFileUpload}></FileUploadSection>
+        ? <HoverProvider>
+          <SchedulePage schedule={file} />
+        </HoverProvider>
+        : <FileUploadSection onFileUpload={handleFileUpload} />
       }
     </div>
   );
