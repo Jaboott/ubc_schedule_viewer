@@ -55,7 +55,7 @@ function CourseDetail({ course }) {
 
     return (
         <div className="flex flex-col pb-1 px-3 text-black">
-            <hr className="border-[#363943]" />
+            <hr className="border-[#363943] mb-1" />
             {course.Lecture && <CourseSection title="Lecture" courseDetail={course.Lecture} />}
             {course.Discussion && <CourseSection title="Discussion" courseDetail={course.Discussion} />}
             {course.Laboratory && <CourseSection title="Laboratory" courseDetail={course.Laboratory} />}

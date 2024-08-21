@@ -1,4 +1,4 @@
-import CourseList from './CourseList';
+import CourseList from './Course/CourseList';
 import TermSelector from './TermSelector';
 
 function LeftBar({ schedule, onTermChange }) {
