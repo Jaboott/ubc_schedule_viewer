@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import './App.css';
 import FileUploadSection from './components/FileUpload/FileUploadPage';
 import SchedulePage from './components/Schedule/SchedulePage';
 import readFile from './util/xlsxParser';
