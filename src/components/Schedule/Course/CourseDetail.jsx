@@ -1,25 +1,8 @@
 import { IoPersonOutline, IoLocationOutline } from "react-icons/io5";
 import { IoMdTime } from "react-icons/io";
+import { convertToDecimalTime } from "../../../util/utils";
 
 function CourseDetail({ course }) {
-
-    // Convert decimal time to 12 hr
-    const convertTime = (time) => {
-        let hours = Math.floor(time);
-        let minutes = Math.round((time - hours) * 60);
-        const modifier = (hours >= 12) && (hours != 24) ? 'PM' : 'AM';
-
-        if (hours > 12) {
-            hours = hours - 12;
-        } else if (hours == 0 || hours == 24) {
-            hours = 12;
-        }
-
-        minutes = minutes < 10 ? '0' + minutes : minutes;
-
-        return `${hours}:${minutes} ${modifier}`;
-    }
-
     // Component of the course details
     const CourseSection = ({ title, courseDetail }) => {
         return (
@@ -40,8 +23,8 @@ function CourseDetail({ course }) {
                 <div className="flex items-center">
                     <IoMdTime />
                     <h1 className="text-xs pl-1">{
-                        convertTime(courseDetail.meeting_patterns.start_time) + " - " +
-                        convertTime(courseDetail.meeting_patterns.end_time)
+                        convertToDecimalTime(courseDetail.meeting_patterns.start_time) + " - " +
+                        convertToDecimalTime(courseDetail.meeting_patterns.end_time)
                     }</h1>
                 </div>
                 {/* Professor */}

@@ -52,43 +52,6 @@ function parseJson(coursesJson) {
 }
 
 /**
- * Convert the courses to a weekday format
- * @param {object} term1Courses - The JSON of term 1 courses
- * @param {object} term2Courses - The JSON of term 2 courses
- * @param {object} courseList - The JSON of both term courses organized by weekday
- */
-export function ConvertToCalendar(term1Courses, term2Courses) {
-    // Used to convert string representation of date to index
-    const dayToIndex = {
-        "Mon": 0,
-        "Tue": 1,
-        "Wed": 2,
-        "Thu": 3,
-        "Fri": 4
-    };
-
-    // Add courses to its matching weekdays
-    const addCourse = (courses, courseList) => {
-        for (const course of courses) {
-            for (const day of course['meeting_patterns'].course_day) {
-                courseList[dayToIndex[day]].push(course);
-            }
-        }
-    }
-
-    let term1CourseList = initWeekList();
-    let term2CourseList = initWeekList();
-
-    addCourse(term1Courses, term1CourseList);
-    addCourse(term2Courses, term2CourseList);
-
-    return {
-        'term_1': term1CourseList,
-        'term_2': term2CourseList
-    };
-}
-
-/**
  * Parse the JSON representation of a single course for specific fields
  * @param {object} courseJson - The raw JSON representation of a course
  * @returns {object} - A single JSON course with needed fields
