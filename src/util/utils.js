@@ -31,6 +31,15 @@ export function convertToCalendar(termCourses) {
         "Fri": 4
     };
 
+    // Initialize a empty list with 5 index
+    const  initWeekList = () => {
+        let weekList = [];
+        for (let i = 0; i < 5; i++) {
+            weekList[i] = [];
+        }
+        return weekList;
+    }
+
     // Add courses to its matching weekdays
     const addCourse = (courses, courseList) => {
         for (const course of courses) {
