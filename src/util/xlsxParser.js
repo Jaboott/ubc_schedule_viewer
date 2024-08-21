@@ -8,7 +8,7 @@ import * as XLSX from 'xlsx';
 export function readFile(file) {
     return new Promise((resolve, reject) => {
         const fileReader = new FileReader();
-        
+
         fileReader.onload = (event) => {
             const arrayBuffer = event.target.result;
             const workbook = XLSX.read(arrayBuffer);
@@ -34,9 +34,20 @@ export function readFile(file) {
 function parseJson(coursesJson) {
     let term1Courses = [];
     let term2Courses = [];
-    
+    const map = new Map();
+    const colors = ["#DAB4E0", "#B7DFED", "#E0B4B4", "#B4B4E0", "#E8DFD3", "#C3E8B8"];
+    let unique1 = 0;
+    let unique2 = 0;
+
     for (const courseJson of coursesJson) {
         const course = parseCourse(courseJson);
+
+        // Assign each unique course a color
+        if (!map.has(course["course"].course_code)) {
+            map.set(course["course"].course_code, colors[course.term == 1 ? unique1++ : unique2++]);
+        } 
+        course.color = map.get(course["course"].course_code);
+
         // Seperate the list into two terms
         if (course.term == 1) {
             term1Courses.push(course);
@@ -72,7 +83,7 @@ function parseCourse(courseJson) {
  */
 function getAdditional(courseJson) {
     let prof = courseJson[9];
-    
+
     // When prof is not set
     if (!prof) {
         prof = "Prof TBD";
@@ -156,18 +167,6 @@ function getCourseInfo(courseInfo) {
         'course_section': courseSection,
         'course_title': courseTitle
     };
-}
-
-/**
- * Initialize a list containing 5 lists representing each weekday
- * @returns {object[]} - A list representing 5 days of the week 
- */
-function initWeekList() {
-    let weekList = [];
-    for (let i = 0; i < 5; i++) {
-        weekList[i] = [];
-    }
-    return weekList;
 }
 
 export default readFile;
