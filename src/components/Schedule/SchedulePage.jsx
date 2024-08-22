@@ -17,7 +17,7 @@ function SchedulePage({ schedule }) {
                 onTermChange={handleTermChange}
             ></LeftBar>
             <hr className="border-b border-[#282a30] lg:w-px lg:h-screen lg:border-l-2"></hr>
-            <CalendarSection schedule={convertToCalendar(schedule[term])}></CalendarSection>
+            <CalendarSection schedule={convertToCalendar(schedule[term])} />
         </div>
     }
     </>);

@@ -8,7 +8,7 @@ function Calendar({ schedule }) {
     const { handleMouseEnter, handleMouseLeave, hoveredTag } = useHover();
 
     return (
-        <div className="grid grid-cols-[80px_repeat(5,_1fr)] mr-14 ml-7">
+        <div className="grid grid-cols-[80px_repeat(5,_1fr)] mr-2 lg:mr-14 lg:ml-7">
             {/* Weekday Labels */}
             {daysOfWeek.map((day, index) => (
                 <div
@@ -38,7 +38,7 @@ function Calendar({ schedule }) {
                                     onMouseEnter={() => handleMouseEnter(course["course"].course_code)}
                                     onMouseLeave={handleMouseLeave}
                                 >
-                                    <CalendarCourse course={course} time={time} isHover={hoveredTag == course["course"].course_code}></CalendarCourse>
+                                    <CalendarCourse course={course} time={time} isHover={hoveredTag == course["course"].course_code} />
                                 </div>
                             ))}
                         </div>

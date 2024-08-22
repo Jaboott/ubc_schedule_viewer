@@ -4,7 +4,7 @@ const HoverContext = createContext();
 
 export const HoverProvider = ({ children }) => {
     const [hoveredTag, setHoveredTag] = useState(null);
-
+    
     const handleMouseEnter = useCallback((tag) => {
         setHoveredTag(tag);
     }, []);
@@ -14,7 +14,7 @@ export const HoverProvider = ({ children }) => {
     }, []);
 
     return (
-        <HoverContext.Provider value={{ hoveredTag, handleMouseEnter, handleMouseLeave }}>
+        <HoverContext.Provider value={{ hoveredTag, handleMouseEnter, handleMouseLeave}}>
             {children}
         </HoverContext.Provider>
     );

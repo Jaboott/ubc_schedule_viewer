@@ -34,7 +34,7 @@ function FileUploadSection({ onFileUpload }) {
                     : 'Click Choose File button to get started or drag and drop files to upload.'
                 }
             </span>
-            <FileUploadButton onFileUpload={onFileUpload}></FileUploadButton>
+            <FileUploadButton onFileUpload={onFileUpload} />
         </div>
     );
 }

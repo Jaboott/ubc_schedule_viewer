@@ -47,7 +47,7 @@ function Course({ course }) {
                 </div>
                 <i className={`mr-3 place-content-center ${expand ? "rotate-[-90deg]" : "rotate-0"} ease-in-out duration-100`}><FiChevronLeft className="text-[#696b6f] text-xl" /></i>
             </div>
-
+            
             {/* Course Details */}
             <div
                 ref={contentRef}
