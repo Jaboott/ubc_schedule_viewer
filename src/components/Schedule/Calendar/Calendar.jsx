@@ -5,7 +5,7 @@ import { useHover } from "../HoverContext";
 function Calendar({ schedule }) {
     const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
     const timeSlots = Array.from({ length: 15 }, (v, i) => i + 8);
-    const { handleMouseEnter, handleMouseLeave, hoveredTag } = useHover();
+    const { handleMouseEnter, handleMouseLeave, hoveredTag, handleClick } = useHover();
 
     return (
         <div className="grid grid-cols-[80px_repeat(5,_1fr)] mr-2 lg:mr-14 lg:ml-7">
@@ -37,6 +37,7 @@ function Calendar({ schedule }) {
                                     key={idx}
                                     onMouseEnter={() => handleMouseEnter(course["course"].course_code)}
                                     onMouseLeave={handleMouseLeave}
+                                    onClick={() => handleClick(course["course"].course_code)}
                                 >
                                     <CalendarCourse course={course} time={time} isHover={hoveredTag == course["course"].course_code} />
                                 </div>

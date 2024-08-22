@@ -6,7 +6,7 @@ import { useHover } from "../HoverContext";
 function Course({ course }) {
     const [expand, setExpand] = useState(false);
     const contentRef = useRef(null);
-    const { handleMouseEnter, handleMouseLeave, hoveredTag } = useHover();
+    const { handleMouseEnter, handleMouseLeave, hoveredTag, clickedTag, isClicked } = useHover();
 
     const handleClick = () => {
         setExpand(!expand);
@@ -16,6 +16,13 @@ function Course({ course }) {
     useEffect(() => {
         setExpand(false);
     }, [course]);
+    
+    // Expand card when calendar equivalent gets clicked on
+    useEffect(() => {
+        if (clickedTag == course.course_code) {
+            setExpand(!expand);
+        }
+    }, [clickedTag, isClicked]);
 
     // Transition effect for interacting with a course
     useEffect(() => {
