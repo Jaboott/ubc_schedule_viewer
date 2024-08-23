@@ -29,9 +29,9 @@ function TimeLine() {
             style={{ marginTop: 54 + 56 * (time - 8) }}
         >
             <div className="flex">
-                <div className="flex w-[80px] justify-end">
+                <div className="flex w-[60px] lg:w-[80px] justify-end">
                     <h1
-                        className="mr-4 text-[#d66d71] bg-[#1e1f28] text-sm font-medium absolute"
+                        className="mr-4 text-[#d66d71] bg-[#1e1f28] text-xs font-medium absolute lg:text-sm"
                         style={{
                             top: (time - Math.floor(time)) <= 0.25 ? '-20px' : '0',
                             paddingTop: (time - Math.floor(time)) <= 0.25 ? 20 : 0,
