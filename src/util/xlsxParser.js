@@ -24,12 +24,12 @@ export function readFile(file) {
                 if (scheduleJson[i][0] == "My Enrolled Courses") {
                     startIndex = i + 3;
                 }
-                if (scheduleJson[i][0] == "My Dropped/Withdrawn Courses") {
+                if (scheduleJson[i][0] == "My Dropped/Withdrawn Courses" || scheduleJson[i][0] == "My Waitlisted Courses") {
                     endIndex = i;
                     break;
                 }
             }
-
+            
             const coursesJson = scheduleJson.slice(startIndex, endIndex);
             resolve(parseJson(coursesJson));
         };
