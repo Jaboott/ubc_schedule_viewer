@@ -25,14 +25,23 @@ function TimeLine() {
     return (
         (time > 8 && time < 23) &&
         <div
-            className="absolute z-40"
+            className="absolute z-10 w-full"
             style={{ marginTop: 54 + 56 * (time - 8) }}
         >
-            <div className="flex items-center">
+            <div className="flex">
                 <div className="flex w-[80px] justify-end">
-                    <h1 className="mr-4 text-[#d66d71] bg-[#1e1f28] text-sm font-medium">{convertDecimalTime(time)}</h1>
+                    <h1
+                        className="mr-4 text-[#d66d71] bg-[#1e1f28] text-sm font-medium absolute"
+                        style={{
+                            top: (time - Math.floor(time)) <= 0.25 ? '-20px' : '0',
+                            paddingTop: (time - Math.floor(time)) <= 0.25 ? 20 : 0,
+                            paddingBottom: (time - Math.floor(time)) >= 0.75 ? 20 : 0
+                        }}
+                    >
+                        {convertDecimalTime(time)}
+                    </h1>
                 </div>
-                {/* <hr className="border-[#c65f64] grow" /> */}
+                <hr className="border-[#c65f64] grow mt-[9px]" />
             </div>
         </div>
     )
