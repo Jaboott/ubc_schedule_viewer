@@ -12,7 +12,7 @@ function Calendar({ schedule }) {
     return (
         <div className="relative mr-2 lg:mr-14 lg:ml-7">
             <TimeLine />
-            <div className="grid grid-cols-[80px_repeat(5,_1fr)] ">
+            <div className="grid grid-cols-[70px_repeat(5,_1fr)] lg:grid-cols-[80px_repeat(5,_1fr)]">
                 {/* Weekday Labels */}
                 {daysOfWeek.map((day, index) => (
                     <div

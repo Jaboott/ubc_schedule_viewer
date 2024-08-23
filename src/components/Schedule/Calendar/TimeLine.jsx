@@ -29,7 +29,7 @@ function TimeLine() {
             style={{ marginTop: 54 + 56 * (time - 8) }}
         >
             <div className="flex">
-                <div className="flex w-[60px] lg:w-[80px] justify-end">
+                <div className="flex w-[70px] lg:w-[80px] justify-end">
                     <h1
                         className="mr-4 text-[#d66d71] bg-[#1e1f28] text-xs font-medium absolute lg:text-sm"
                         style={{
