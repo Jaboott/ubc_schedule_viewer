@@ -14,7 +14,23 @@ export function readFile(file) {
             const workbook = XLSX.read(arrayBuffer);
             const worksheet = workbook.Sheets[workbook.SheetNames[0]];
             // Skip the first 3 line
-            const coursesJson = XLSX.utils.sheet_to_json(worksheet, { header: 1, range: 3 });
+            const scheduleJson = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+            let startIndex = 0;
+            let endIndex = scheduleJson.length;
+
+            // Slice the array so that it only contains the array
+            for (let i = 0; i < scheduleJson.length; i++) {
+                if (scheduleJson[i][0] == "My Enrolled Courses") {
+                    startIndex = i + 3;
+                }
+                if (scheduleJson[i][0] == "My Dropped/Withdrawn Courses") {
+                    endIndex = i;
+                    break;
+                }
+            }
+
+            const coursesJson = scheduleJson.slice(startIndex, endIndex);
             resolve(parseJson(coursesJson));
         };
 
@@ -45,7 +61,7 @@ function parseJson(coursesJson) {
         // Assign each unique course a color
         if (!map.has(course["course"].course_code)) {
             map.set(course["course"].course_code, colors[course.term == 1 ? unique1++ : unique2++]);
-        } 
+        }
         course.color = map.get(course["course"].course_code);
 
         // Seperate the list into two terms
