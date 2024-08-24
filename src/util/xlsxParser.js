@@ -29,7 +29,7 @@ export function readFile(file) {
                     break;
                 }
             }
-            
+
             const coursesJson = scheduleJson.slice(startIndex, endIndex);
             resolve(parseJson(coursesJson));
         };
@@ -72,10 +72,13 @@ function parseJson(coursesJson) {
         }
     }
 
-    return {
+    const schedule = {
         'term_1': term1Courses,
         'term_2': term2Courses
     };
+
+    localStorage.setItem("schedule", JSON.stringify(schedule));
+    return schedule;
 }
 
 /**
