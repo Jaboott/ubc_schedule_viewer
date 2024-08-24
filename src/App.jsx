@@ -11,7 +11,7 @@ function App() {
   const handleFileUpload = useCallback(async (uploaded_file) => {
     readFile(uploaded_file)
       .then((parsed_file) => {
-        console.log(typeof parsed_file);
+        // console.log(typeof parsed_file);
         setFile(parsed_file);
       })
   }, [readFile, setFile]);

@@ -10,7 +10,7 @@ function Calendar({ schedule }) {
     const highLightDay = new Date().getDay();
 
     return (
-        <div className="relative mr-2 lg:mr-14 lg:ml-7">
+        <div className="relative lg:mr-14 lg:ml-7">
             <TimeLine />
             <div className="grid grid-cols-[70px_repeat(5,_1fr)] lg:grid-cols-[80px_repeat(5,_1fr)]">
                 {/* Weekday Labels */}
@@ -18,7 +18,7 @@ function Calendar({ schedule }) {
                     <div
                         key={day}
                         className={`h-16 flex items-center justify-center border-[#24252e] ${index == 0 ? 'col-start-2' : ''}`}>
-                        <h1 className={`text-xl font-normal rounded-2xl px-4 ${(highLightDay - 1) == index ? "bg-[#d66d71]" : "text-white"}`}>{day}</h1>
+                        <h1 className={`text-sm lg:text-xl font-normal rounded-2xl px-4 ${(highLightDay - 1) == index ? "bg-[#d66d71]" : "text-white"}`}>{day}</h1>
                     </div>
                 ))}
 
