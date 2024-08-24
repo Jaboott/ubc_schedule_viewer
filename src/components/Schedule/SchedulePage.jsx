@@ -10,17 +10,14 @@ function SchedulePage({ schedule }) {
         setTerm(term);
     }, [term]);
 
-    return (<> {schedule &&
+    return (
+        schedule &&
         <div className="flex flex-col lg:flex-row">
-            <LeftBar
-                schedule={schedule[term]}
-                onTermChange={handleTermChange}
-            />
+            <LeftBar schedule={schedule[term]} onTermChange={handleTermChange} />
             <hr className="border-b border-[#282a30] lg:w-px lg:h-screen lg:border-l-2"></hr>
             <CalendarSection schedule={convertToCalendar(schedule[term])} />
         </div>
-    }
-    </>);
+    );
 }
 
 export default SchedulePage;
