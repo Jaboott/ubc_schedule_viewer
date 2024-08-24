@@ -4,7 +4,7 @@ function CalendarSection({ schedule }) {
     const monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
     ];
-    const month = new Date();
+    const date = new Date();
 
     if (schedule) {
         console.log(schedule);
@@ -12,7 +12,7 @@ function CalendarSection({ schedule }) {
 
     return (
         <div className="flex grow flex-col">
-            <h1 className="text-4xl font-medium my-5 pl-7">{monthNames[month.getMonth()]}</h1>
+            <h1 className="text-4xl font-medium my-5 pl-7">{monthNames[date.getMonth()] + " " + date.getDate()}</h1>
             <Calendar schedule={schedule} />
         </div>
     );
