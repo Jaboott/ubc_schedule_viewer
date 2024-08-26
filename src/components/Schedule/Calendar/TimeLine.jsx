@@ -31,11 +31,12 @@ function TimeLine() {
             <div className="flex">
                 <div className="flex w-[70px] lg:w-[80px] justify-end">
                     <h1
-                        className="mr-4 text-[#d66d71] bg-[#1e1f28] text-xs font-medium absolute lg:text-sm"
+                        className="mr-4 text-[#d66d71] text-xs font-medium absolute lg:text-sm"
                         style={{
                             top: (time - Math.floor(time)) <= 0.25 ? '-20px' : '0',
                             paddingTop: (time - Math.floor(time)) <= 0.25 ? 20 : 0,
-                            paddingBottom: (time - Math.floor(time)) >= 0.75 ? 20 : 0
+                            paddingBottom: (time - Math.floor(time)) >= 0.75 ? 20 : 0,
+                            backgroundColor: ((time - Math.floor(time)) <= 0.25 || (time - Math.floor(time)) >= 0.75) ? "#1e1f28" : "none"
                         }}
                     >
                         {convertDecimalTime(time)}
