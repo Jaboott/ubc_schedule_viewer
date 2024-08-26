@@ -17,8 +17,8 @@ function Calendar({ schedule }) {
                 {daysOfWeek.map((day, index) => (
                     <div
                         key={day}
-                        className={`h-16 flex items-center justify-center border-[#24252e] ${index == 0 ? 'col-start-2' : ''}`}>
-                        <h1 className={`text-sm lg:text-xl font-normal rounded-2xl px-4 ${(highLightDay - 1) == index ? "bg-[#d66d71]" : "text-white"}`}>{day}</h1>
+                        className={`h-16 flex items-center justify-center ${index == 0 ? 'col-start-2' : ''}`}>
+                        <h1 className={`text-sm lg:text-xl font-normal border-[#d66d71] px-2 ${(highLightDay - 1) == index ? "border-b-2" : "text-white"}`}>{day}</h1>
                     </div>
                 ))}
 
