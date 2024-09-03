@@ -15,7 +15,6 @@ export function readFile(file) {
             const worksheet = workbook.Sheets[workbook.SheetNames[0]];
             // Skip the first 3 line
             const scheduleJson = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-
             let startIndex = 0;
             let endIndex = scheduleJson.length;
 
@@ -31,6 +30,7 @@ export function readFile(file) {
             }
 
             const coursesJson = scheduleJson.slice(startIndex, endIndex);
+            console.log(coursesJson);
             resolve(parseJson(coursesJson));
         };
 
@@ -56,20 +56,25 @@ function parseJson(coursesJson) {
     let unique2 = 0;
 
     for (const courseJson of coursesJson) {
-        const course = parseCourse(courseJson);
+        try {
+            const course = parseCourse(courseJson);
 
-        // Assign each unique course a color
-        if (!map.has(course["course"].course_code)) {
-            map.set(course["course"].course_code, colors[course.term == 1 ? unique1++ : unique2++]);
-        }
-        course.color = map.get(course["course"].course_code);
+            // Assign each unique course a color
+            if (!map.has(course["course"].course_code)) {
+                map.set(course["course"].course_code, colors[course.term == 1 ? unique1++ : unique2++]);
+            }
+            course.color = map.get(course["course"].course_code);
 
-        // Seperate the list into two terms
-        if (course.term == 1) {
-            term1Courses.push(course);
-        } else {
-            term2Courses.push(course);
+            // Seperate the list into two terms
+            if (course.term == 1) {
+                term1Courses.push(course);
+            } else {
+                term2Courses.push(course);
+            }
+        } catch (err) {
+            console.log(err);
         }
+
     }
 
     const schedule = {
