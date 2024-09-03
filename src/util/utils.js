@@ -32,7 +32,7 @@ export function convertToCalendar(termCourses) {
     };
 
     // Initialize a empty list with 5 index
-    const  initWeekList = () => {
+    const initWeekList = () => {
         let weekList = [];
         for (let i = 0; i < 5; i++) {
             weekList[i] = [];
@@ -43,8 +43,13 @@ export function convertToCalendar(termCourses) {
     // Add courses to its matching weekdays
     const addCourse = (courses, courseList) => {
         for (const course of courses) {
-            for (const day of course['meeting_patterns'].course_day) {
-                courseList[dayToIndex[day]].push(course);
+            // Ignoring courses with no meeting patterns
+            try {
+                for (const day of course['meeting_patterns'].course_day) {
+                    courseList[dayToIndex[day]].push(course);
+                }
+            } catch (err) {
+                console.log("Course" + course["course"].course_code+" have no meeting pattern")
             }
         }
     }

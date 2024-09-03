@@ -56,23 +56,19 @@ function parseJson(coursesJson) {
     let unique2 = 0;
 
     for (const courseJson of coursesJson) {
-        try {
-            const course = parseCourse(courseJson);
+        const course = parseCourse(courseJson);
 
-            // Assign each unique course a color
-            if (!map.has(course["course"].course_code)) {
-                map.set(course["course"].course_code, colors[course.term == 1 ? unique1++ : unique2++]);
-            }
-            course.color = map.get(course["course"].course_code);
+        // Assign each unique course a color
+        if (!map.has(course["course"].course_code)) {
+            map.set(course["course"].course_code, colors[course.term == 1 ? unique1++ : unique2++]);
+        }
+        course.color = map.get(course["course"].course_code);
 
-            // Seperate the list into two terms
-            if (course.term == 1) {
-                term1Courses.push(course);
-            } else {
-                term2Courses.push(course);
-            }
-        } catch (err) {
-            console.log(err);
+        // Seperate the list into two terms
+        if (course.term == 1) {
+            term1Courses.push(course);
+        } else {
+            term2Courses.push(course);
         }
 
     }
@@ -95,7 +91,7 @@ function parseCourse(courseJson) {
     return {
         'term': Number(courseJson[0].charAt(courseJson[0].indexOf('Term') + 5)),
         'course': getCourseInfo(courseJson[4].split('-')),
-        'meeting_patterns': getMeetingPatterns(courseJson[7].split(' | ')),
+        'meeting_patterns': getMeetingPatterns(courseJson[7] ? courseJson[7].split(' | ') : null),
         'additional': getAdditional(courseJson)
     };
 }
@@ -127,6 +123,15 @@ function getAdditional(courseJson) {
  * @returns {object} - A JSON representing meeting patterns with specific fields
  */
 function getMeetingPatterns(meetingPattern) {
+    if (!meetingPattern) {
+        return {
+            'start_time': null,
+            'end_time': null,
+            'course_day': null,
+            'course_location': null
+        }
+    }
+
     const courseDay = meetingPattern[1].split(' ');
     let courseLocation = meetingPattern[3];
 

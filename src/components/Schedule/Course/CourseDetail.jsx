@@ -15,18 +15,21 @@ function CourseDetail({ course }) {
                     </span>
                 </div>
                 {/* Location */}
-                <div className="flex items-center">
-                    <IoLocationOutline />
-                    <h1 className="text-xs pl-1">{courseDetail.meeting_patterns.course_location}</h1>
-                </div>
+                {courseDetail.meeting_patterns.course_location &&
+                    <div className="flex items-center">
+                        <IoLocationOutline />
+                        <h1 className="text-xs pl-1">{courseDetail.meeting_patterns.course_location}</h1>
+                    </div>}
                 {/* Time */}
-                <div className="flex items-center">
-                    <IoMdTime />
-                    <h1 className="text-xs pl-1">{
-                        convertDecimalTime(courseDetail.meeting_patterns.start_time) + " - " +
-                        convertDecimalTime(courseDetail.meeting_patterns.end_time)
-                    }</h1>
-                </div>
+                {courseDetail.meeting_patterns.start_time &&
+                    <div className="flex items-center">
+                        <IoMdTime />
+                        <h1 className="text-xs pl-1">{
+                            convertDecimalTime(courseDetail.meeting_patterns.start_time)
+                            + " - " +
+                            convertDecimalTime(courseDetail.meeting_patterns.end_time)
+                        }</h1>
+                    </div>}
                 {/* Professor */}
                 <div className="flex items-center">
                     <IoPersonOutline />
