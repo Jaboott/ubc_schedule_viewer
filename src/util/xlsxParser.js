@@ -5,7 +5,18 @@ import * as XLSX from 'xlsx';
  * @param {File} file - The xlsx file the user inputed through form
  * @returns {object} - JSON representation of both term of school year
  */
+
+let course = 0;
+let meeting_patterns = 0;
+
 export function readFile(file) {
+    const endSections = [
+        "My Dropped/Withdrawn Courses",
+        "My Waitlisted Courses",
+        "My Completed Courses",
+        "Enrolled Credits"
+    ]
+
     return new Promise((resolve, reject) => {
         const fileReader = new FileReader();
 
@@ -13,24 +24,30 @@ export function readFile(file) {
             const arrayBuffer = event.target.result;
             const workbook = XLSX.read(arrayBuffer);
             const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-            // Skip the first 3 line
+            // Manually set !ref to a large enough range
+            worksheet['!ref'] = 'A1:EZ500';
             const scheduleJson = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+            let headerIndex = 0;
             let startIndex = 0;
             let endIndex = scheduleJson.length;
 
-            // Slice the array so that it only contains the array
+            // Slice the array so that it only contains the enrolled courses content
             for (let i = 0; i < scheduleJson.length; i++) {
-                if (scheduleJson[i][0] == "My Enrolled Courses") {
+                if (scheduleJson[i][0] === "My Enrolled Courses") {
+                    headerIndex = i + 2;
                     startIndex = i + 3;
                 }
-                if (scheduleJson[i][0] == "My Dropped/Withdrawn Courses" || scheduleJson[i][0] == "My Waitlisted Courses") {
+                if (endSections.includes(scheduleJson[i][0])) {
                     endIndex = i;
                     break;
                 }
             }
 
+            const header = scheduleJson[headerIndex];
+            course = header.indexOf("Section");
+            meeting_patterns = header.indexOf("Meeting Patterns");
             const coursesJson = scheduleJson.slice(startIndex, endIndex);
-            console.log(coursesJson);
+            console.table(coursesJson);
             resolve(parseJson(coursesJson));
         };
 
@@ -64,7 +81,7 @@ function parseJson(coursesJson) {
         }
         course.color = map.get(course["course"].course_code);
 
-        // Seperate the list into two terms
+        // Separate the list into two terms
         if (course.term == 1) {
             term1Courses.push(course);
         } else {
@@ -90,8 +107,8 @@ function parseJson(coursesJson) {
 function parseCourse(courseJson) {
     return {
         'term': Number(courseJson[0].charAt(courseJson[0].indexOf('Term') + 5)),
-        'course': getCourseInfo(courseJson[4].split('-')),
-        'meeting_patterns': getMeetingPatterns(courseJson[7] ? courseJson[7].split(' | ') : null),
+        'course': getCourseInfo(courseJson[course].split('-')),
+        'meeting_patterns': getMeetingPatterns(courseJson[meeting_patterns] ? courseJson[meeting_patterns].split(' | ') : null),
         'additional': getAdditional(courseJson)
     };
 }
