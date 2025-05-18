@@ -65,35 +65,28 @@ export function readFile(file) {
  * @returns {object} - JSON representation of both term of school year
  */
 function parseJson(coursesJson) {
-    let term1Courses = [];
-    let term2Courses = [];
+    const schedule = {
+        "term_1": [],
+        "term_2": [],
+        "summer": []
+    };
+
+    // Assigning each unique course to a color
     const map = new Map();
     const colors = ["#DAB4E0", "#B7DFED", "#E0B4B4", "#B4B4E0", "#E8DFD3", "#C3E8B8"];
-    let unique1 = 0;
-    let unique2 = 0;
+    const colorIndex = { "term_1": 0, "term_2": 0, "summer": 0};
 
     for (const courseJson of coursesJson) {
         const course = parseCourse(courseJson);
+        const termKey = course.term === 1? "term_1": course.term === 2? "term_2" : "summer";
 
-        // Assign each unique course a color
-        if (!map.has(course["course"].course_code)) {
-            map.set(course["course"].course_code, colors[course.term == 1 ? unique1++ : unique2++]);
+        if (!map.has(course.course.course_code)) {
+            map.set(course.course.course_code, colors[colorIndex[termKey]++]);
         }
-        course.color = map.get(course["course"].course_code);
-
-        // Separate the list into two terms
-        if (course.term == 1) {
-            term1Courses.push(course);
-        } else {
-            term2Courses.push(course);
-        }
+        course.color = map.get(course.course.course_code);
+        schedule[termKey].push(course);
 
     }
-
-    const schedule = {
-        'term_1': term1Courses,
-        'term_2': term2Courses
-    };
 
     localStorage.setItem("schedule", JSON.stringify(schedule));
     return schedule;
@@ -187,9 +180,9 @@ function convertTime(timeData) {
     minutes = Number(minutes);
 
     // Edge case of 12am and 12pm
-    if (modifier == 'pm' && hours != 12) {
+    if (modifier === 'pm' && hours !== 12) {
         hours += 12;
-    } else if (modifier == 'am' && hours == 12) {
+    } else if (modifier === 'am' && hours === 12) {
         hours = 0;
     }
 
