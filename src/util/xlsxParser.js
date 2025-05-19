@@ -49,7 +49,7 @@ export function readFile(file) {
             course = header.indexOf("Section");
             meeting_patterns = header.indexOf("Meeting Patterns");
             const coursesJson = scheduleJson.slice(startIndex, endIndex);
-            console.table(coursesJson);
+            // console.table(coursesJson);
             resolve(parseJson(coursesJson));
         };
 
@@ -91,6 +91,7 @@ function parseJson(coursesJson) {
     }
 
     localStorage.setItem("schedule", JSON.stringify(schedule));
+    console.table(schedule);
     return schedule;
 }
 
