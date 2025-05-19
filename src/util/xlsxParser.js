@@ -14,7 +14,8 @@ export function readFile(file) {
         "My Dropped/Withdrawn Courses",
         "My Waitlisted Courses",
         "My Completed Courses",
-        "Enrolled Credits"
+        "Enrolled Credits",
+        undefined
     ]
 
     return new Promise((resolve, reject) => {
@@ -37,7 +38,8 @@ export function readFile(file) {
                     headerIndex = i + 2;
                     startIndex = i + 3;
                 }
-                if (endSections.includes(scheduleJson[i][0])) {
+                // Start the endIndex check after startIndex is set
+                if (startIndex !== 0 && i > startIndex && endSections.includes(scheduleJson[i][0])) {
                     endIndex = i;
                     break;
                 }
