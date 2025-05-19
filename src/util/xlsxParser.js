@@ -6,8 +6,12 @@ import * as XLSX from 'xlsx';
  * @returns {object} - JSON representation of both term of school year
  */
 
-let course = 0;
-let meeting_patterns = 0;
+const indexMapping = {
+    course: 0,
+    meeting_patterns: 0,
+    instructor: 0,
+    instructional_format: 0,
+}
 
 export function readFile(file) {
     const endSections = [
@@ -46,8 +50,10 @@ export function readFile(file) {
             }
 
             const header = scheduleJson[headerIndex];
-            course = header.indexOf("Section");
-            meeting_patterns = header.indexOf("Meeting Patterns");
+            indexMapping.course = header.indexOf("Section");
+            indexMapping.meeting_patterns = header.indexOf("Meeting Patterns");
+            indexMapping.instructor = header.indexOf("Instructor");
+            indexMapping.instructional_format = header.indexOf("Instructional Format");
             const coursesJson = scheduleJson.slice(startIndex, endIndex);
             // console.table(coursesJson);
             resolve(parseJson(coursesJson));
@@ -101,10 +107,11 @@ function parseJson(coursesJson) {
  * @returns {object} - A single JSON course with needed fields
  */
 function parseCourse(courseJson) {
+    console.log(courseJson[0].indexOf('Term'))
     return {
-        'term': Number(courseJson[0].charAt(courseJson[0].indexOf('Term') + 5)),
-        'course': getCourseInfo(courseJson[course].split('-')),
-        'meeting_patterns': getMeetingPatterns(courseJson[meeting_patterns] ? courseJson[meeting_patterns].split(' | ') : null),
+        'term': courseJson[0].indexOf('Term') !== -1? Number(courseJson[0].charAt(courseJson[0].indexOf('Term') + 5)) : "summer",
+        'course': getCourseInfo(courseJson[indexMapping.course].split('-')),
+        'meeting_patterns': getMeetingPatterns(courseJson[indexMapping.meeting_patterns] ? courseJson[indexMapping.meeting_patterns].split(' | ') : null),
         'additional': getAdditional(courseJson)
     };
 }
@@ -115,14 +122,14 @@ function parseCourse(courseJson) {
  * @returns {object} - A JSON representing prof and instructional format
  */
 function getAdditional(courseJson) {
-    let prof = courseJson[9];
+    let prof = courseJson[indexMapping.instructor];
 
     // When prof is not set
     if (!prof) {
         prof = "Prof TBD";
     }
 
-    const instructionalFormat = courseJson[5];
+    const instructionalFormat = courseJson[indexMapping.instructional_format];
 
     return {
         'prof': prof,
