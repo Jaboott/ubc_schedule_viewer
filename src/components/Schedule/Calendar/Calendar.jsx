@@ -3,7 +3,7 @@ import CalendarCourse from "./CalendarCourse";
 import { useHover } from "../HoverContext";
 import TimeLine from "./TimeLine";
 
-function Calendar({ schedule }) {
+function Calendar({ courses }) {
     const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
     const timeSlots = Array.from({ length: 15 }, (v, i) => i + 8);
     const { handleMouseEnter, handleMouseLeave, hoveredTag, handleClick } = useHover();
@@ -36,7 +36,7 @@ function Calendar({ schedule }) {
                     <div key={day} className="border-r-2 border-[#24252e]">
                         {timeSlots.map((time) => (
                             <div key={time} className="h-14 border-t-2 border-[#24252e] relative">
-                                {(schedule[index] || []).map((course, idx) => (
+                                {(courses[index] || []).map((course, idx) => (
                                     <div
                                         key={idx}
                                         onMouseEnter={() => handleMouseEnter(course["course"].course_code)}

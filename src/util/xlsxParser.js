@@ -5,7 +5,23 @@ import * as XLSX from 'xlsx';
  * @param {File} file - The xlsx file the user inputed through form
  * @returns {object} - JSON representation of both term of school year
  */
+
+const indexMapping = {
+    course: 0,
+    meeting_patterns: 0,
+    instructor: 0,
+    instructional_format: 0,
+}
+
 export function readFile(file) {
+    const endSections = [
+        "My Dropped/Withdrawn Courses",
+        "My Waitlisted Courses",
+        "My Completed Courses",
+        "Enrolled Credits",
+        undefined
+    ]
+
     return new Promise((resolve, reject) => {
         const fileReader = new FileReader();
 
@@ -13,24 +29,33 @@ export function readFile(file) {
             const arrayBuffer = event.target.result;
             const workbook = XLSX.read(arrayBuffer);
             const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-            // Skip the first 3 line
+            // Manually set !ref to a large enough range
+            worksheet['!ref'] = 'A1:EZ500';
             const scheduleJson = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+            let headerIndex = 0;
             let startIndex = 0;
             let endIndex = scheduleJson.length;
 
-            // Slice the array so that it only contains the array
+            // Slice the array so that it only contains the enrolled courses content
             for (let i = 0; i < scheduleJson.length; i++) {
-                if (scheduleJson[i][0] == "My Enrolled Courses") {
+                if (scheduleJson[i][0] === "My Enrolled Courses") {
+                    headerIndex = i + 2;
                     startIndex = i + 3;
                 }
-                if (scheduleJson[i][0] == "My Dropped/Withdrawn Courses" || scheduleJson[i][0] == "My Waitlisted Courses") {
+                // Start the endIndex check after startIndex is set
+                if (startIndex !== 0 && i > startIndex && endSections.includes(scheduleJson[i][0])) {
                     endIndex = i;
                     break;
                 }
             }
 
+            const header = scheduleJson[headerIndex];
+            indexMapping.course = header.indexOf("Section");
+            indexMapping.meeting_patterns = header.indexOf("Meeting Patterns");
+            indexMapping.instructor = header.indexOf("Instructor");
+            indexMapping.instructional_format = header.indexOf("Instructional Format");
             const coursesJson = scheduleJson.slice(startIndex, endIndex);
-            console.log(coursesJson);
+            // console.table(coursesJson);
             resolve(parseJson(coursesJson));
         };
 
@@ -48,37 +73,31 @@ export function readFile(file) {
  * @returns {object} - JSON representation of both term of school year
  */
 function parseJson(coursesJson) {
-    let term1Courses = [];
-    let term2Courses = [];
+    const schedule = {
+        "term_1": [],
+        "term_2": [],
+        "summer": []
+    };
+
+    // Assigning each unique course to a color
     const map = new Map();
     const colors = ["#DAB4E0", "#B7DFED", "#E0B4B4", "#B4B4E0", "#E8DFD3", "#C3E8B8"];
-    let unique1 = 0;
-    let unique2 = 0;
+    const colorIndex = { "term_1": 0, "term_2": 0, "summer": 0};
 
     for (const courseJson of coursesJson) {
         const course = parseCourse(courseJson);
+        const termKey = course.term === 1? "term_1": course.term === 2? "term_2" : "summer";
 
-        // Assign each unique course a color
-        if (!map.has(course["course"].course_code)) {
-            map.set(course["course"].course_code, colors[course.term == 1 ? unique1++ : unique2++]);
+        if (!map.has(course.course.course_code)) {
+            map.set(course.course.course_code, colors[colorIndex[termKey]++]);
         }
-        course.color = map.get(course["course"].course_code);
-
-        // Seperate the list into two terms
-        if (course.term == 1) {
-            term1Courses.push(course);
-        } else {
-            term2Courses.push(course);
-        }
+        course.color = map.get(course.course.course_code);
+        schedule[termKey].push(course);
 
     }
 
-    const schedule = {
-        'term_1': term1Courses,
-        'term_2': term2Courses
-    };
-
     localStorage.setItem("schedule", JSON.stringify(schedule));
+    console.table(schedule);
     return schedule;
 }
 
@@ -88,10 +107,11 @@ function parseJson(coursesJson) {
  * @returns {object} - A single JSON course with needed fields
  */
 function parseCourse(courseJson) {
+    console.log(courseJson[0].indexOf('Term'))
     return {
-        'term': Number(courseJson[0].charAt(courseJson[0].indexOf('Term') + 5)),
-        'course': getCourseInfo(courseJson[4].split('-')),
-        'meeting_patterns': getMeetingPatterns(courseJson[7] ? courseJson[7].split(' | ') : null),
+        'term': courseJson[0].indexOf('Term') !== -1? Number(courseJson[0].charAt(courseJson[0].indexOf('Term') + 5)) : "summer",
+        'course': getCourseInfo(courseJson[indexMapping.course].split('-')),
+        'meeting_patterns': getMeetingPatterns(courseJson[indexMapping.meeting_patterns] ? courseJson[indexMapping.meeting_patterns].split(' | ') : null),
         'additional': getAdditional(courseJson)
     };
 }
@@ -102,14 +122,14 @@ function parseCourse(courseJson) {
  * @returns {object} - A JSON representing prof and instructional format
  */
 function getAdditional(courseJson) {
-    let prof = courseJson[9];
+    let prof = courseJson[indexMapping.instructor];
 
     // When prof is not set
     if (!prof) {
         prof = "Prof TBD";
     }
 
-    const instructionalFormat = courseJson[5];
+    const instructionalFormat = courseJson[indexMapping.instructional_format];
 
     return {
         'prof': prof,
@@ -170,9 +190,9 @@ function convertTime(timeData) {
     minutes = Number(minutes);
 
     // Edge case of 12am and 12pm
-    if (modifier == 'pm' && hours != 12) {
+    if (modifier === 'pm' && hours !== 12) {
         hours += 12;
-    } else if (modifier == 'am' && hours == 12) {
+    } else if (modifier === 'am' && hours === 12) {
         hours = 0;
     }
 
