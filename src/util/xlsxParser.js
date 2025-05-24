@@ -110,7 +110,6 @@ function parseJson(coursesJson) {
  * @returns {object} - A single JSON course with needed fields
  */
 function parseCourse(courseJson) {
-    console.log(courseJson[0].indexOf('Term'))
     return {
         term: courseJson[0].indexOf('Term') !== -1? Number(courseJson[0].charAt(courseJson[0].indexOf('Term') + 5)) : "summer",
         course: getCourseInfo(courseJson[indexMapping.course].split('-')),

@@ -11,7 +11,6 @@ const dayToRruleMapping = {
 };
 
 export function createIcsEvent(courses) {
-    console.log(courses);
     const eventsList = []
 
     for (const course of courses) {
