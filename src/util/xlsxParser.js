@@ -50,7 +50,6 @@ export function readFile(file) {
                     break;
                 }
             }
-
             const header = scheduleJson[headerIndex];
             indexMapping.course = header.indexOf("Section");
             indexMapping.meeting_patterns = header.indexOf("Meeting Patterns");
