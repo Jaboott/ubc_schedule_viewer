@@ -9,12 +9,15 @@ To get started with the viewer, you get the xlsx file from:
 3. Upload the file through the home screen
 4. View your schedule!
 
+## Schedule Viewer
+<img src="https://i.imgur.com/FxUX3kP.png" height=400px>
+
+## Interactive Components
+<img src="https://i.imgur.com/YdFGpks.png" height=400px>
+
+## 📅 Export Term to Calendar
+Clicking the `Export Term to Calendar` button downloads an `.ics` file of your selected term’s schedule. 
+You can import it into calendar apps like Google Calendar, Outlook, or Apple Calendar to keep track of your classes.
 
 ## Home Screen
 <img src="https://i.imgur.com/ujmyZX8.png" height=400px>
-
-## Schedule Viewer
-<img src="https://i.imgur.com/mjHbjug.png" height=400px>
-
-## Interactive Components
-<img src="https://i.imgur.com/pIiIYG3.png" height=400px>
