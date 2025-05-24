@@ -6,9 +6,7 @@ function CalendarSection({ courses }) {
     ];
     const date = new Date();
 
-    if (courses) {
-        console.log(`Selected courses: ${courses}`);
-    }
+    if (courses) console.log(courses);
 
     return (
         <div className="flex grow flex-col">
