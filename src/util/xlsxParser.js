@@ -11,6 +11,8 @@ const indexMapping = {
     meeting_patterns: 0,
     instructor: 0,
     instructional_format: 0,
+    start_date: 0,
+    end_date: 0,
 }
 
 export function readFile(file) {
@@ -54,6 +56,8 @@ export function readFile(file) {
             indexMapping.meeting_patterns = header.indexOf("Meeting Patterns");
             indexMapping.instructor = header.indexOf("Instructor");
             indexMapping.instructional_format = header.indexOf("Instructional Format");
+            indexMapping.start_date = header.indexOf("Start Date");
+            indexMapping.end_date = header.indexOf("End Date");
             const coursesJson = scheduleJson.slice(startIndex, endIndex);
             // console.table(coursesJson);
             resolve(parseJson(coursesJson));
@@ -109,10 +113,14 @@ function parseJson(coursesJson) {
 function parseCourse(courseJson) {
     console.log(courseJson[0].indexOf('Term'))
     return {
-        'term': courseJson[0].indexOf('Term') !== -1? Number(courseJson[0].charAt(courseJson[0].indexOf('Term') + 5)) : "summer",
-        'course': getCourseInfo(courseJson[indexMapping.course].split('-')),
-        'meeting_patterns': getMeetingPatterns(courseJson[indexMapping.meeting_patterns] ? courseJson[indexMapping.meeting_patterns].split(' | ') : null),
-        'additional': getAdditional(courseJson)
+        term: courseJson[0].indexOf('Term') !== -1? Number(courseJson[0].charAt(courseJson[0].indexOf('Term') + 5)) : "summer",
+        course: getCourseInfo(courseJson[indexMapping.course].split('-')),
+        meeting_patterns: getMeetingPatterns(courseJson[indexMapping.meeting_patterns] ? courseJson[indexMapping.meeting_patterns].split(' | ') : null),
+        additional: getAdditional(courseJson),
+        course_duration: {
+            start: courseJson[indexMapping.start_date],
+            end: courseJson[indexMapping.end_date]
+        },
     };
 }
 
