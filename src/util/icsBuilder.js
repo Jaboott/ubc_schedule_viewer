@@ -38,17 +38,26 @@ export function createIcsEvent(courses) {
 
 }
 
+// TODO: Consider if missing information
 function createCourseIcs(course) {
     const courseTitle = `${course.course.course_code} ${course.course.course_section}`;
     const courseLocation = course.meeting_patterns.course_location;
     const courseStartTime = course.meeting_patterns.start_time
     const courseEndTime = course.meeting_patterns.end_time;
-    const courseStartDate = excelSerialToDate(course.course_duration.start);
-    const courseEndDate = excelSerialToDate(course.course_duration.end);
+    const termStartDate = excelSerialToDate(course.course_duration.start);
+    const termEndDate = excelSerialToDate(course.course_duration.end);
+
+    // don't have access to the date the course first starts, computing that date here
+    const courseStartDate = new Date(termStartDate);
+    const dayMap = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+    const courseDayNum = dayMap[course.meeting_patterns.course_day[0]];
+    const daysToAdd = (courseDayNum - courseStartDate.getDay() + 7) % 7;
+    courseStartDate.setDate(courseStartDate.getDate() + daysToAdd);
+
     const courseDays = course.meeting_patterns.course_day.map(
         (day) => {return dayToRruleMapping[day]}
     ).join(",");
-    const courseRecurrenceRule = `FREQ=WEEKLY;BYDAY=${courseDays};INTERVAL=1;UNTIL=${dateToIcsString(courseEndDate)};`
+    const courseRecurrenceRule = `FREQ=WEEKLY;BYDAY=${courseDays};INTERVAL=1;UNTIL=${dateToIcsString(termEndDate)};`;
 
     return {
         title: courseTitle,
