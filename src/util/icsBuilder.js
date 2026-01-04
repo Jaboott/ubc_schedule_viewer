@@ -14,7 +14,11 @@ export function createIcsEvent(courses) {
     const eventsList = []
 
     for (const course of courses) {
-        eventsList.push(createCourseIcs(course));
+        try {
+            eventsList.push(createCourseIcs(course));
+        } catch (err) {
+            console.log("Skipped generating ICS of course " + course["course"].course_code+" because it have no meeting pattern")
+        }
     }
 
     console.log(ics.createEvents(eventsList).value);
