@@ -14,32 +14,39 @@ function CourseDetail({ course }) {
                         {courseDetail.course.course_code + " " + courseDetail.course.course_section}
                     </span>
                 </div>
-                {courseDetail.meeting_patterns?.map((meeting, index) => (
-                    <div key={index}>
+                {courseDetail.meeting_patterns?.length > 0 ? (
+                    courseDetail.meeting_patterns.map((meeting, index) => (
+                        <div key={index}>
 
-                        {/* Location */}
-                        {meeting.course_location && (
-                            <div className="flex items-center">
-                                <IoLocationOutline />
-                                <h1 className="text-xs pl-1">{meeting.course_location}</h1>
-                            </div>
-                        )}
+                            {/* Location */}
+                            {meeting.course_location && (
+                                <div className="flex items-center">
+                                    <IoLocationOutline />
+                                    <h1 className="text-xs pl-1">{meeting.course_location}</h1>
+                                </div>
+                            )}
 
-                        {/* Time */}
-                        {meeting.start_time && (
-                            <div className="flex items-center">
-                                <IoMdTime />
-                                <h1 className="text-xs pl-1">
-                                    {convertDecimalTime(meeting.start_time) +
-                                        " - " +
-                                        convertDecimalTime(meeting.end_time)}
-                                </h1>
-                            </div>
-                        )}
-                        <br/>
+                            {/* Time */}
+                            {meeting.start_time && (
+                                <div className="flex items-center">
+                                    <IoMdTime />
+                                    <h1 className="text-xs pl-1">
+                                        {convertDecimalTime(meeting.start_time) +
+                                            " - " +
+                                            convertDecimalTime(meeting.end_time)}
+                                    </h1>
+                                </div>
+                            )}
+                            <br/>
 
+                        </div>
+                    ))
+                ) : (
+                    <div className="flex items-center">
+                        <IoLocationOutline />
+                        <p className="text-xs pl-1">No meeting info available</p>
                     </div>
-                ))}
+                )}
                 {/* Professor */}
                 <div className="flex items-center">
                     <IoPersonOutline />
