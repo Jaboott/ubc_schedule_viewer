@@ -45,8 +45,12 @@ export function convertToCalendar(termCourses) {
         for (const course of courses) {
             // Ignoring courses with no meeting patterns
             try {
-                for (const day of course['meeting_patterns'].course_day) {
-                    courseList[dayToIndex[day]].push(course);
+                for (const meeting_pattern of course['meeting_patterns']) {
+                    for (const day of meeting_pattern.course_day) {
+                        const course_copy = {...course}
+                        course_copy['meeting_patterns'] = meeting_pattern
+                        courseList[dayToIndex[day]].push(course_copy);
+                    }
                 }
             } catch (err) {
                 console.log("Course" + course["course"].course_code+" have no meeting pattern")

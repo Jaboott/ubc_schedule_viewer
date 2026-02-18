@@ -16,6 +16,11 @@ const indexMapping = {
 }
 
 export function readFile(file) {
+    const startSections = [
+        "My Enrolled Courses",
+        "Courses"
+    ]
+
     const endSections = [
         "My Dropped/Withdrawn Courses",
         "My Waitlisted Courses",
@@ -40,7 +45,7 @@ export function readFile(file) {
 
             // Slice the array so that it only contains the enrolled courses content
             for (let i = 0; i < scheduleJson.length; i++) {
-                if (scheduleJson[i][0] === "My Enrolled Courses") {
+                if (startSections.includes(scheduleJson[i][0])) {
                     headerIndex = i + 2;
                     startIndex = i + 3;
                 }
@@ -113,7 +118,7 @@ function parseCourse(courseJson) {
     return {
         term: courseJson[0].indexOf('Term') !== -1? Number(courseJson[0].charAt(courseJson[0].indexOf('Term') + 5)) : "summer",
         course: getCourseInfo(courseJson[indexMapping.course].split('-')),
-        meeting_patterns: getMeetingPatterns(courseJson[indexMapping.meeting_patterns] ? courseJson[indexMapping.meeting_patterns].split(' | ') : null),
+        meeting_patterns: getMeetingPatterns(courseJson[indexMapping.meeting_patterns]),
         additional: getAdditional(courseJson),
         course_duration: {
             start: courseJson[indexMapping.start_date],
@@ -145,11 +150,11 @@ function getAdditional(courseJson) {
 
 /**
  * Parse the String for meeting pattern and split it into more specific fields
- * @param {string} meetingPattern - The string containing the meeting pattern
+ * @param {string} meetingPatterns - The string containing the meeting pattern
  * @returns {object} - A JSON representing meeting patterns with specific fields
  */
-function getMeetingPatterns(meetingPattern) {
-    if (!meetingPattern) {
+function getMeetingPatterns(meetingPatterns) {
+    if (!meetingPatterns) {
         return {
             'start_time': null,
             'end_time': null,
@@ -158,8 +163,20 @@ function getMeetingPatterns(meetingPattern) {
         }
     }
 
+    let meetingPatternsList = []
+    meetingPatterns = meetingPatterns.split('\n').filter(Boolean)
+
+    for (let meetingPattern of meetingPatterns) {
+        meetingPattern = meetingPattern.split(' | ')
+        meetingPatternsList.push(getMeetingPattern(meetingPattern))
+    }
+
+    return meetingPatternsList
+}
+
+function getMeetingPattern(meetingPattern) {
     const courseDay = meetingPattern[1].split(' ');
-    let courseLocation = meetingPattern[3];
+    let courseLocation = meetingPattern[4];
 
     // When location of course is not set
     if (!courseLocation) {
